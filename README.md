@@ -163,6 +163,25 @@ org.springframework.security.oauth2.core.OAuth2AuthenticationException: Provided
 At this point, it seems that both of them got `Authentication request for failed!` problem.
 I am going to create a skipper client into keycloak and test again.
 
-Tx
+* Changed skipper-deployment, including 
+
+```
+        - name: SPRING_SECURITY_OAUTH2_AUTHORIZATION_CHECK_TOKEN_ACCESS
+          value: 'isAuthenticated()'   
+```
+
+Scdf starts ok and dashboard is accesible. 
+
+
+![/dasboard showed](screen_skipper_with_isauthenticated.png)
+
+
+
+Checking `about` dasboard is:
+
+![/about showed](screen_skipper_with_isauthenticated_2_about.png)
+
+But skipper info seems to be a problem, shows `N/A`
+
 
     
