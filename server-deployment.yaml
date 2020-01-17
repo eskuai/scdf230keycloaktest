@@ -1,0 +1,158 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ template "scdf.fullname" . }}-server
+  labels:
+    app: {{ template "scdf.name" . }}
+    component: server
+    chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
+    release: "{{ .Release.Name }}"
+    heritage: "{{ .Release.Service }}"
+spec:
+  selector:
+    matchLabels:
+      app: {{ template "scdf.name" . }}
+      component: server
+      release: "{{ .Release.Name }}"
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: {{ template "scdf.name" . }}
+        component: server
+        release: "{{ .Release.Name }}"
+    spec:
+      containers:
+      - name: {{ template "scdf.fullname" . }}-server
+        image: {{ .Values.server.image }}:{{ .Values.server.version }}
+        imagePullPolicy: {{ .Values.server.imagePullPolicy }}
+        volumeMounts:
+          - name: tmpcacerts
+            mountPath: /tmp/scdf2cacerts
+            readOnly: true
+          - name: database
+            mountPath: /etc/secrets/database
+            readOnly: true
+          {{- if .Values.changeTZ.enabled }}
+          - name: tz-config
+            mountPath: /etc/localtime
+          {{- end }}
+        ports:
+        - containerPort: 8080
+          name: http
+        resources:
+{{ toYaml .Values.server.resources | indent 10 }}
+        livenessProbe:
+          httpGet:
+            path: /management/health
+            port: http
+          initialDelaySeconds: 150
+          periodSeconds: 15
+          timeoutSeconds: 50
+          failureThreshold: 50
+          periodSeconds: 60
+        readinessProbe:
+          httpGet:
+            path: /management/health
+            port: http
+          initialDelaySeconds: 60
+          periodSeconds: 15
+          timeoutSeconds: 50
+          failureThreshold: 50
+        env:
+        - name: LOGGING_LEVEL_ROOT
+          value: 'INFO'
+        - name: KUBERNETES_NAMESPACE
+          valueFrom:
+            fieldRef:
+              fieldPath: "metadata.namespace"
+        - name: JAVA_TOOL_OPTIONS
+          value: '-Dlogging.level.org.springframework.security=DEBUG -Duser.timezone=Europe/Madrid  -Djavax.net.ssl.trustStorePassword=changeit -Djavax.net.ssl.trustStore=/tmp/scdf2cacerts/cacerts -XX:+UnlockExperimentalVMOptions -XX:+UseCGroupMemoryLimitForHeap -XX:-TieredCompilation -XX:TieredStopAtLevel=1 -XX:+UseCompressedOops -XX:+UseCompressedClassPointers -Xverify:none  -XX:+AggressiveOpts -XX:+UseG1GC -XX:+UseStringDeduplication  -Xms4g -Xmx6g'
+        - name: SERVER_PORT
+          value: '8080'
+        - name: SPRING_CLOUD_CONFIG_ENABLED
+          value: 'false'
+        - name: SPRING_CLOUD_DATAFLOW_FEATURES_ANALYTICS_ENABLED
+          value: 'false'
+        - name: SPRING_JPA_OPEN_IN_VIEW
+          value: 'false'
+        - name: SPRING_CLOUD_KUBERNETES_SECRETS_ENABLE_API
+          value: 'true'
+        - name: SPRING_CLOUD_DATAFLOW_FEATURES_SCHEDULES_ENABLED
+          value: 'true'
+        - name: SPRING_CLOUD_KUBERNETES_SECRETS_PATHS
+          value: /etc/secrets
+        - name: SPRING_CLOUD_KUBERNETES_CONFIG_NAME
+          value: {{ template "scdf.fullname" . }}-server
+        - name: SPRING_CLOUD_SKIPPER_CLIENT_SERVER_URI
+          value: 'http://${{ printf "{" }}{{ template "scdf.envname" . }}_SKIPPER_SERVICE_HOST}/api'
+        - name: SPRING_CLOUD_DATAFLOW_SERVER_URI
+          value: 'http://${{ printf "{" }}{{ template "scdf.envname" . }}_SERVER_SERVICE_HOST}:${{ printf "{" }}{{ template "scdf.envname" . }}_SERVER_SERVICE_PORT}'
+        - name: spring.cloud.dataflow.security.authorization.provider-role-mappings.keycloak.map-oauth-scopes
+          value: 'true'
+        - name: spring.cloud.dataflow.security.authorization.provider-role-mappings.keycloak.role-mappings.ROLE_CREATE
+          value: 'dataflow.create'
+        - name: spring.cloud.dataflow.security.authorization.provider-role-mappings.keycloak.role-mappings.ROLE_DEPLOY
+          value: 'dataflow.deploy'
+        - name: spring.cloud.dataflow.security.authorization.provider-role-mappings.keycloak.role-mappings.ROLE_MODIFY
+          value: 'dataflow.modify'
+        - name: spring.cloud.dataflow.security.authorization.provider-role-mappings.keycloak.role-mappings.ROLE_MANAGE
+          value: 'dataflow.manage'
+        - name: spring.cloud.dataflow.security.authorization.provider-role-mappings.keycloak.role-mappings.ROLE_SCHEDULE
+          value: 'dataflow.schedule'
+        - name: spring.cloud.dataflow.security.authorization.provider-role-mappings.keycloak.role-mappings.ROLE_DESTROY
+          value: 'dataflow.destroy'
+        - name: spring.cloud.dataflow.security.authorization.provider-role-mappings.keycloak.role-mappings.ROLE_VIEW
+          value: 'dataflow.view'
+        - name: spring.cloud.dataflow.security.authorization.provider-role-mappings.keycloak.map-oauth-scopes
+          value: 'true'
+        - name: SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_KEYCLOAK_REDIRECT_URI
+          value: '{baseUrl}/login/oauth2/code/{registrationId}'
+        - name: SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_KEYCLOAK_AUTHORIZATION_GRANT_TYPE
+          value: 'authorization_code'
+        - name: SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_KEYCLOAK_CLIENT_NAME
+          value: 'mk'
+        - name: SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_KEYCLOAK_CLIENT_ID
+          value: 'dataflow'
+        - name: SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_KEYCLOAK_CLIENT_SECRET
+          value: '99fad78e-20f0-4b91-bcaf-0324e34ddf71'       
+        - name: SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_KEYCLOAK_SCOPE
+          value: 'openid,dataflow.create,dataflow.deploy,dataflow.destroy,dataflow.manage,dataflow.modify,dataflow.schedule,dataflow.view'
+        - name: SPRING_SECURITY_OAUTH2_CLIENT_PROVIDER_KEYCLOAK_JWK_SET_URI
+          value: 'http://keycloak-http:8844/auth/realms/master/protocol/openid-connect/certs'        
+        - name: SPRING_SECURITY_OAUTH2_CLIENT_PROVIDER_KEYCLOAK_TOKEN_URI
+          value: 'http://keycloak-http:8844/auth/realms/master/protocol/openid-connect/token'
+        - name: SPRING_SECURITY_OAUTH2_CLIENT_PROVIDER_KEYCLOAK_USER_INFO_URI
+          value: 'http://keycloak-http:8844/auth/realms/master/protocol/openid-connect/userinfo'
+        - name: SPRING_SECURITY_OAUTH2_CLIENT_PROVIDER_KEYCLOAK_USER_NAME_ATTRIBUTE
+          value: 'preferred_username'         
+        - name: SPRING_SECURITY_OAUTH2_CLIENT_PROVIDER_KEYCLOAK_AUTHORIZATION_URI
+          value: 'http://keycloak-http:8844/auth/realms/master/protocol/openid-connect/auth'         
+        - name: SPRING_SECURITY_OAUTH2_RESOURCESERVER_OPAQUETOKEN_INTROSPECTION_URI
+          value: 'http://keycloak-http:8844/auth/realms/master/protocol/openid-connect/token/introspect'         
+        - name: SPRING_SECURITY_OAUTH2_RESOURCESERVER_OPAQUETOKEN_CLIENT_ID
+          value: 'dataflow'
+        - name: SPRING_SECURITY_OAUTH2_RESOURCESERVER_OPAQUETOKEN_CLIENT_SECRET
+          value: '99fad78e-20f0-4b91-bcaf-0324e34ddf71'         
+        - name: SPRING_SECURITY_OAUTH2_AUTHORIZATION_CHECK_TOKEN_ACCESS
+          value: 'isAuthenticated()'
+        - name: SPRING_APPLICATION_JSON
+          value: "{ \"javax.net.ssl.trustStore\": \"/tmp/scdf2cacerts/cacerts\",\"javax.net.ssl.trustStorePassword\": \"changeit\" , \"com.sun.net.ssl.checkRevocation\": \"false\", \"maven\": { \"local-repository\": \"myLocalrepoMK\", \"remote-repositories\": { \"mk-repository\": {\"url\": \"http://${NEXUS_SERVICE_HOST}:${NEXUS_SERVICE_PORT}/repository/maven-releases/\",\"auth\": {\"username\": \"admin\",\"password\": \"admin123\"}},\"spring-repo\": {\"url\": \"https://repo.spring.io/libs-release\",\"auth\": {\"username\": \"\",\"password\": \"\"}},\"spring-repo-snapshot\": {\"url\": \"https://repo.spring.io/libs-snapshot/\",\"auth\": {\"username\": \"\",\"password\": \"\"}}}} }"
+      volumes:
+        - name: tmpcacerts
+          secret:
+            secretName: scdf2cacerts
+        {{- if .Values.changeTZ.enabled }}
+        - name: tz-config
+          hostPath:
+            path: /usr/share/zoneinfo/{{ .Values.changeTZ.location }}
+        {{- end }}
+        - name: database
+          secret:
+            {{- if .Values.mysql.enabled }}
+            secretName: {{ printf "%s-%s" .Release.Name "mysql" | trunc 63 | trimSuffix "-" }}
+            {{- else }}
+            secretName: {{ printf "%s-%s" .Release.Name "database" | trunc 63 | trimSuffix "-" }}
+            {{- end }}
+      serviceAccountName: {{ template "scdf.serviceAccountName" . }}
+
