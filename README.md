@@ -295,5 +295,9 @@ googleing ...
 
 ![dashboard freezed](screen_dashboard_about_freezed.png)
 
+* how can i do to make a config that make a automatic redirect after login to dashboard
 
-    
+![not really good login dashboard](screen_ugly_redirect.png)
+
+
+because i need to set the uri with dashboard to the browser  `http://scdf2-server-data-flow-server:8080/dashboard`    
