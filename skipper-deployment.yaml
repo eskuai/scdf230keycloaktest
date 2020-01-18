@@ -79,23 +79,23 @@ spec:
           value: {{ template "scdf.fullname" . }}-skipper
         - name: SPRING_CLOUD_DATAFLOW_SECURITY_CF_USE_UAA
           value: 'false'
-        - name: spring.cloud.dataflow.security.authorization.provider-role-mappings.keycloak.map-oauth-scopes
+        - name: spring.cloud.skipper.security.authorization.provider-role-mappings.keycloak.map-oauth-scopes
           value: 'true'
-        - name: spring.cloud.dataflow.security.authorization.provider-role-mappings.keycloak.role-mappings.ROLE_CREATE
+        - name: spring.cloud.skipper.security.authorization.provider-role-mappings.keycloak.role-mappings.ROLE_CREATE
           value: 'dataflow.create'
-        - name: spring.cloud.dataflow.security.authorization.provider-role-mappings.keycloak.role-mappings.ROLE_DEPLOY
+        - name: spring.cloud.skipper.security.authorization.provider-role-mappings.keycloak.role-mappings.ROLE_DEPLOY
           value: 'dataflow.deploy'
-        - name: spring.cloud.dataflow.security.authorization.provider-role-mappings.keycloak.role-mappings.ROLE_MODIFY
+        - name: spring.cloud.skipper.security.authorization.provider-role-mappings.keycloak.role-mappings.ROLE_MODIFY
           value: 'dataflow.modify'
-        - name: spring.cloud.dataflow.security.authorization.provider-role-mappings.keycloak.role-mappings.ROLE_MANAGE
+        - name: spring.cloud.skipper.security.authorization.provider-role-mappings.keycloak.role-mappings.ROLE_MANAGE
           value: 'dataflow.manage'
-        - name: spring.cloud.dataflow.security.authorization.provider-role-mappings.keycloak.role-mappings.ROLE_SCHEDULE
+        - name: spring.cloud.skipper.security.authorization.provider-role-mappings.keycloak.role-mappings.ROLE_SCHEDULE
           value: 'dataflow.schedule'
-        - name: spring.cloud.dataflow.security.authorization.provider-role-mappings.keycloak.role-mappings.ROLE_DESTROY
+        - name: spring.cloud.skipper.security.authorization.provider-role-mappings.keycloak.role-mappings.ROLE_DESTROY
           value: 'dataflow.destroy'
-        - name: spring.cloud.dataflow.security.authorization.provider-role-mappings.keycloak.role-mappings.ROLE_VIEW
+        - name: spring.cloud.skipper.security.authorization.provider-role-mappings.keycloak.role-mappings.ROLE_VIEW
           value: 'dataflow.view'
-        - name: spring.cloud.dataflow.security.authorization.provider-role-mappings.keycloak.map-oauth-scopes
+        - name: spring.cloud.skipper.security.authorization.provider-role-mappings.keycloak.map-oauth-scopes
           value: 'true'
         - name: SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_KEYCLOAK_REDIRECT_URI
           value: '{baseUrl}/login/oauth2/code/{registrationId}'
@@ -106,7 +106,7 @@ spec:
         - name: SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_KEYCLOAK_CLIENT_ID
           value: 'dataflow'
         - name: SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_KEYCLOAK_CLIENT_SECRET
-          value: '99fad78e-20f0-4b91-bcaf-0324e34ddf71'       
+          value: '276d47c4-ad51-4434-95ce-be693b65bf08'       
         - name: SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_KEYCLOAK_SCOPE
           value: 'openid,dataflow.create,dataflow.deploy,dataflow.destroy,dataflow.manage,dataflow.modify,dataflow.schedule,dataflow.view'
         - name: SPRING_SECURITY_OAUTH2_CLIENT_PROVIDER_KEYCLOAK_JWK_SET_URI
@@ -124,7 +124,9 @@ spec:
         - name: SPRING_SECURITY_OAUTH2_RESOURCESERVER_OPAQUETOKEN_CLIENT_ID
           value: 'dataflow'
         - name: SPRING_SECURITY_OAUTH2_RESOURCESERVER_OPAQUETOKEN_CLIENT_SECRET
-          value: '99fad78e-20f0-4b91-bcaf-0324e34ddf71'         
+          value: '99fad78e-20f0-4b91-bcaf-0324e34ddf71'
+        - name: SPRING_SECURITY_OAUTH2_AUTHORIZATION_CHECK_TOKEN_ACCESS
+          value: 'isAuthenticated()'         
       volumes:
         - name: tmpcacerts
           secret:
