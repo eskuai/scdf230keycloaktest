@@ -110,30 +110,28 @@ spec:
           value: '{baseUrl}/login/oauth2/code/{registrationId}'
         - name: SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_KEYCLOAK_AUTHORIZATION_GRANT_TYPE
           value: 'authorization_code'
-        - name: SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_KEYCLOAK_CLIENT_NAME
-          value: 'mk'
         - name: SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_KEYCLOAK_CLIENT_ID
           value: 'dataflow'
         - name: SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_KEYCLOAK_CLIENT_SECRET
-          value: '99fad78e-20f0-4b91-bcaf-0324e34ddf71'       
+          value: '2577e86a-cb98-46db-b0ff-d509dfa7e99f'       
         - name: SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_KEYCLOAK_SCOPE
           value: 'openid,dataflow.create,dataflow.deploy,dataflow.destroy,dataflow.manage,dataflow.modify,dataflow.schedule,dataflow.view'
         - name: SPRING_SECURITY_OAUTH2_CLIENT_PROVIDER_KEYCLOAK_JWK_SET_URI
-          value: 'http://keycloak-http:8844/auth/realms/master/protocol/openid-connect/certs'        
+          value: 'http://keycloak-http:8844/auth/realms/scdf23/protocol/openid-connect/certs'        
         - name: SPRING_SECURITY_OAUTH2_CLIENT_PROVIDER_KEYCLOAK_TOKEN_URI
-          value: 'http://keycloak-http:8844/auth/realms/master/protocol/openid-connect/token'
+          value: 'http://keycloak-http:8844/auth/realms/scdf23/protocol/openid-connect/token'
         - name: SPRING_SECURITY_OAUTH2_CLIENT_PROVIDER_KEYCLOAK_USER_INFO_URI
-          value: 'http://keycloak-http:8844/auth/realms/master/protocol/openid-connect/userinfo'
+          value: 'http://keycloak-http:8844/auth/realms/scdf23/protocol/openid-connect/userinfo'
         - name: SPRING_SECURITY_OAUTH2_CLIENT_PROVIDER_KEYCLOAK_USER_NAME_ATTRIBUTE
-          value: 'preferred_username'         
+          value: 'user_name'         
         - name: SPRING_SECURITY_OAUTH2_CLIENT_PROVIDER_KEYCLOAK_AUTHORIZATION_URI
-          value: 'http://keycloak-http:8844/auth/realms/master/protocol/openid-connect/auth'         
+          value: 'http://keycloak-http:8844/auth/realms/scdf23/protocol/openid-connect/auth'         
         - name: SPRING_SECURITY_OAUTH2_RESOURCESERVER_OPAQUETOKEN_INTROSPECTION_URI
-          value: 'http://keycloak-http:8844/auth/realms/master/protocol/openid-connect/token/introspect'         
+          value: 'http://keycloak-http:8844/auth/realms/scdf23/protocol/openid-connect/token/introspect'         
         - name: SPRING_SECURITY_OAUTH2_RESOURCESERVER_OPAQUETOKEN_CLIENT_ID
           value: 'dataflow'
         - name: SPRING_SECURITY_OAUTH2_RESOURCESERVER_OPAQUETOKEN_CLIENT_SECRET
-          value: '99fad78e-20f0-4b91-bcaf-0324e34ddf71'         
+          value: '2577e86a-cb98-46db-b0ff-d509dfa7e99f'         
         - name: SPRING_SECURITY_OAUTH2_AUTHORIZATION_CHECK_TOKEN_ACCESS
           value: 'isAuthenticated()'
         - name: SPRING_APPLICATION_JSON

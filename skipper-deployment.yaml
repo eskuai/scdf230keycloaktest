@@ -60,7 +60,7 @@ spec:
         - name: LOGGING_LEVEL_ROOT
           value: 'INFO'
         - name: JAVA_TOOL_OPTIONS
-          value: '-Dlogging.level.org.springframework.security=DEBUG  -Duser.timezone=Europe/Madrid -Djavax.net.ssl.trustStorePassword=changeit -Djavax.net.ssl.trustStore=/tmp/scdf2cacerts/cacerts -XX:+UnlockExperimentalVMOptions -XX:+UseCGroupMemoryLimitForHeap  -XX:-TieredCompilation -XX:TieredStopAtLevel=1 -XX:+UseCompressedOops -XX:+UseCompressedClassPointers -Xverify:none  -XX:+AggressiveOpts -XX:+UseG1GC -XX:+UseStringDeduplication -Xmx3g -Xms3g'
+          value: '-Dlogging.level.org.springframework.security=DEBUG  -Duser.timezone=Europe/Madrid -Djavax.net.ssl.trustStorePassword=changeit -Djavax.net.ssl.trustStore=/tmp/scdf2cacerts/cacerts -XX:+UnlockExperimentalVMOptions -XX:+UseCGroupMemoryLimitForHeap  -XX:-TieredCompilation -XX:TieredStopAtLevel=1 -XX:+UseCompressedOops -XX:+UseCompressedClassPointers -Xverify:none  -XX:+AggressiveOpts -XX:+UseG1GC -XX:+UseStringDeduplication -Xms2g -Xmx4g'
         - name: KUBERNETES_NAMESPACE
           valueFrom:
             fieldRef:
@@ -77,14 +77,12 @@ spec:
           value: /etc/secrets
         - name: SPRING_CLOUD_KUBERNETES_CONFIG_NAME
           value: {{ template "scdf.fullname" . }}-skipper
-        - name: SPRING_CLOUD_DATAFLOW_SECURITY_CF_USE_UAA
-          value: 'false'
         - name: spring.cloud.skipper.security.authorization.provider-role-mappings.keycloak.map-oauth-scopes
           value: 'true'
         - name: spring.cloud.skipper.security.authorization.provider-role-mappings.keycloak.role-mappings.ROLE_CREATE
           value: 'dataflow.create'
         - name: spring.cloud.skipper.security.authorization.provider-role-mappings.keycloak.role-mappings.ROLE_DEPLOY
-          value: 'dataflow.deploy'
+          value: 'dataflow.deploy' 
         - name: spring.cloud.skipper.security.authorization.provider-role-mappings.keycloak.role-mappings.ROLE_MODIFY
           value: 'dataflow.modify'
         - name: spring.cloud.skipper.security.authorization.provider-role-mappings.keycloak.role-mappings.ROLE_MANAGE
@@ -100,33 +98,29 @@ spec:
         - name: SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_KEYCLOAK_REDIRECT_URI
           value: '{baseUrl}/login/oauth2/code/{registrationId}'
         - name: SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_KEYCLOAK_AUTHORIZATION_GRANT_TYPE
-          value: 'authorization_code'
-        - name: SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_KEYCLOAK_CLIENT_NAME
-          value: 'mk'          
+          value: 'authorization_code'       
         - name: SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_KEYCLOAK_CLIENT_ID
-          value: 'skipper'
+          value: 'dataflow'
         - name: SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_KEYCLOAK_CLIENT_SECRET
-          value: '276d47c4-ad51-4434-95ce-be693b65bf08'       
+          value: '2577e86a-cb98-46db-b0ff-d509dfa7e99f'       
         - name: SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_KEYCLOAK_SCOPE
-          value: 'openid,dataflow.create,dataflow.deploy,dataflow.destroy,dataflow.manage,dataflow.modify,dataflow.schedule,dataflow.view'
+          value: 'openid'
         - name: SPRING_SECURITY_OAUTH2_CLIENT_PROVIDER_KEYCLOAK_JWK_SET_URI
-          value: 'http://keycloak-http:8844/auth/realms/master/protocol/openid-connect/certs'        
+          value: 'http://keycloak-http:8844/auth/realms/scdf23/protocol/openid-connect/certs'        
         - name: SPRING_SECURITY_OAUTH2_CLIENT_PROVIDER_KEYCLOAK_TOKEN_URI
-          value: 'http://keycloak-http:8844/auth/realms/master/protocol/openid-connect/token'
+          value: 'http://keycloak-http:8844/auth/realms/scdf23/protocol/openid-connect/token'
         - name: SPRING_SECURITY_OAUTH2_CLIENT_PROVIDER_KEYCLOAK_USER_INFO_URI
-          value: 'http://keycloak-http:8844/auth/realms/master/protocol/openid-connect/userinfo'
+          value: 'http://keycloak-http:8844/auth/realms/scdf23/protocol/openid-connect/userinfo'
         - name: SPRING_SECURITY_OAUTH2_CLIENT_PROVIDER_KEYCLOAK_USER_NAME_ATTRIBUTE
-          value: 'preferred_username'         
+          value: 'user_name'         
         - name: SPRING_SECURITY_OAUTH2_CLIENT_PROVIDER_KEYCLOAK_AUTHORIZATION_URI
-          value: 'http://keycloak-http:8844/auth/realms/master/protocol/openid-connect/auth'         
+          value: 'http://keycloak-http:8844/auth/realms/scdf23/protocol/openid-connect/auth'         
         - name: SPRING_SECURITY_OAUTH2_RESOURCESERVER_OPAQUETOKEN_INTROSPECTION_URI
-          value: 'http://keycloak-http:8844/auth/realms/master/protocol/openid-connect/token/introspect'         
+          value: 'http://keycloak-http:8844/auth/realms/scdf23/protocol/openid-connect/token/introspect'         
         - name: SPRING_SECURITY_OAUTH2_RESOURCESERVER_OPAQUETOKEN_CLIENT_ID
-          value: 'skipper'
+          value: 'dataflow'
         - name: SPRING_SECURITY_OAUTH2_RESOURCESERVER_OPAQUETOKEN_CLIENT_SECRET
-          value: '276d47c4-ad51-4434-95ce-be693b65bf08'
-        - name: SPRING_SECURITY_OAUTH2_AUTHORIZATION_CHECK_TOKEN_ACCESS
-          value: 'isAuthenticated()'         
+          value: '2577e86a-cb98-46db-b0ff-d509dfa7e99f'
       volumes:
         - name: tmpcacerts
           secret:
