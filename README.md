@@ -712,5 +712,26 @@ org.springframework.security.oauth2.core.OAuth2AuthenticationException: Provided
 
 ```
 
+Googling:
+
+
+```
+
+private TokenIntrospectionSuccessResponse introspect(String token) {
+		return Optional.of(token)
+				.map(this::buildRequest)
+				.map(this::makeRequest)
+				.map(this::adaptToNimbusResponse)
+				.map(this::parseNimbusResponse)
+				.map(this::castToNimbusSuccess)
+				// relying solely on the authorization server to validate this token (not checking 'exp', for example)
+				.filter(TokenIntrospectionSuccessResponse::isActive)
+				.orElseThrow(() -> new OAuth2AuthenticationException(
+						invalidToken("Provided token [" + token + "] isn't active")));
+	}
+
+```
+
+where is the `TokenIntrospectionSuccessResponse` description in logging ??
 
 
