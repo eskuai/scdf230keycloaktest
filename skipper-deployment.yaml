@@ -104,7 +104,7 @@ spec:
         - name: SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_KEYCLOAK_CLIENT_NAME
           value: 'mk'          
         - name: SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_KEYCLOAK_CLIENT_ID
-          value: 'dataflow'
+          value: 'skipper'
         - name: SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_KEYCLOAK_CLIENT_SECRET
           value: '276d47c4-ad51-4434-95ce-be693b65bf08'       
         - name: SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_KEYCLOAK_SCOPE
@@ -122,9 +122,9 @@ spec:
         - name: SPRING_SECURITY_OAUTH2_RESOURCESERVER_OPAQUETOKEN_INTROSPECTION_URI
           value: 'http://keycloak-http:8844/auth/realms/master/protocol/openid-connect/token/introspect'         
         - name: SPRING_SECURITY_OAUTH2_RESOURCESERVER_OPAQUETOKEN_CLIENT_ID
-          value: 'dataflow'
+          value: 'skipper'
         - name: SPRING_SECURITY_OAUTH2_RESOURCESERVER_OPAQUETOKEN_CLIENT_SECRET
-          value: '99fad78e-20f0-4b91-bcaf-0324e34ddf71'
+          value: '276d47c4-ad51-4434-95ce-be693b65bf08'
         - name: SPRING_SECURITY_OAUTH2_AUTHORIZATION_CHECK_TOKEN_ACCESS
           value: 'isAuthenticated()'         
       volumes:

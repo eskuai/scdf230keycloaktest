@@ -301,3 +301,34 @@ googleing ...
 
 
 because i need to set the uri with dashboard to the browser  `http://scdf2-server-data-flow-server:8080/dashboard`    
+
+
+
+-- GMT +2 13:39 Updates ..
+
+* Change skipper.deployment,  (my mistake)
+
+```
+        - name: spring.cloud.skipper.security.authorization.provider-role-mappings.keycloak.map-oauth-scopes
+          value: 'true'
+        - name: spring.cloud.skipper.security.authorization.provider-role-mappings.keycloak.role-mappings.ROLE_CREATE
+          value: 'dataflow.create'
+        - name: spring.cloud.skipper.security.authorization.provider-role-mappings.keycloak.role-mappings.ROLE_DEPLOY
+          value: 'dataflow.deploy'
+        - name: spring.cloud.skipper.security.authorization.provider-role-mappings.keycloak.role-mappings.ROLE_MODIFY
+          value: 'dataflow.modify'
+          
+```
+Same message about token is not active:
+
+```
+020-01-18 13:40:51.237 DEBUG 1 --- [nio-7577-exec-7] o.s.s.authentication.ProviderManager     : Authentication attempt using org.springframework.security.oauth2.server.resource.authentication.OpaqueTokenAuthenticationProvider
+2020-01-18 13:40:51.293 DEBUG 1 --- [nio-7577-exec-7] .s.a.DefaultAuthenticationEventPublisher : No event was found for the exception org.springframework.security.oauth2.core.OAuth2AuthenticationException
+2020-01-18 13:40:51.299 DEBUG 1 --- [nio-7577-exec-7] .o.s.r.w.BearerTokenAuthenticationFilter : Authentication request for failed!
+org.springframework.security.oauth2.core.OAuth2AuthenticationException: Provided token [eyJhbGciOiJSUzI1NiIsInR5cCIgOiAiSldUIiwia2lkIiA6ICIyUWlyQi14SEdUb2wxSlBtbkFjbVVFS1JOREN0V2pSeXVrTERac25QZlJ3In0.eyJqdGkiOiI5OGYyZTFiZS00MWQ3LTQxMDQtYmE4NS1jODdmZTUzZjQ5NDMiLCJleHAiOjE1NzkzNTExMDAsIm5iZiI6MCwiaWF0IjoxNTc5MzUxMDQwLCJpc3MiOiJodHRwOi8va2V5Y2xvYWstaHR0cDo4ODQ0L2F1dGgvcmVhbG1zL21hc3RlciIsImF1ZCI6ImFjY291bnQiLCJzdWIiOiI2ODI1YmE5Yi0zYzEzLTQ4MWItYmUwMC0zYjA0ZWQ5YmJlZWEiLCJ0eXAiOiJCZWFyZXIiLCJhenAiOiJkYXRhZmxvdyIsIm5vbmNlIjoieXZaU3VvTmRXczYwZXBGVXlxTW5ITkNpRDNpZlM5blF6MEtobVdhN1EyRSIsImF1dGhfdGltZSI6MTU3OTM1MTA0MCwic2Vzc2lvbl9zdGF0ZSI6IjU1NzY2NzQ2LTQ3ODUtNDgwNy1hN2E4LTVkYTFjZmE5NDdkNCIsImFjciI6IjEiLCJyZWFsbV9hY2Nlc3MiOnsicm9sZXMiOlsib2ZmbGluZV9hY2Nlc3MiLCJ1bWFfYXV0aG9yaXphdGlvbiIsInNjZGYtcm9sZSJdfSwicmVzb3VyY2VfYWNjZXNzIjp7ImFjY291bnQiOnsicm9sZXMiOlsibWFuYWdlLWFjY291bnQiLCJtYW5hZ2UtYWNjb3VudC1saW5rcyIsInZpZXctcHJvZmlsZSJdfX0sInNjb3BlIjoib3BlbmlkIGRhdGFmbG93LmRlc3Ryb3kgcHJvZmlsZSBlbWFpbCBkYXRhZmxvdy5tYW5hZ2UgZGF0YWZsb3cuc2NoZWR1bGUgZGF0YWZsb3cuY3JlYXRlIGRhdGFmbG93LmRlcGxveSBkYXRhZmxvdy52aWV3IGRhdGFmbG93Lm1vZGlmeSIsImVtYWlsX3ZlcmlmaWVkIjpmYWxzZSwicHJlZmVycmVkX3VzZXJuYW1lIjoibWsifQ.dkfj4SWeI1CvA4KcfqU2etLWPOSDX6P9Xb8TM01xUU_nRb4zxtY3TIlag_rlLeL0docckmwYeRMNmrPhUnZulUGk7TWBG2ZGnjx2Ei38QbiqrVcyDPtjO7ouasgg57D55jVPUK9arItj08_RgdxajP_fQfsbde00Xe-S1MPED02ut6sZSiPFw1OKniK0RYARwNXvHwrJCzEyTtvqIvVp5Ky-uekjlMmGCDr7DlOkMOICg5_6B4WuXqF_IlZdI46ILa-9tnUO0U_MYHAjvQ4Y_kMYpfMPoYstrSJnKHEQTO8NvLO1hDYO9KWql0n4fDydB5DrIhJHg-BEJuO7igfvTg] isn't active
+        at org.springframework.security.oauth2.server.resource.authentication.OpaqueTokenAuthenticationProvider.authenticate(OpaqueTokenAuthenticationProvider.java:99) ~[spring-security-oauth2-resource-server-5.2.1.RELEASE.jar!/:5.2.1.RELEASE]
+        at org.springframework.security.authentication.ProviderManager.authenticate(ProviderManager.java:175) ~[spring-security-core-5.2.1.RELEASE.jar!/:5.2.1.RELEASE]
+        at org.springframework.security.oauth2.server.resource.web.BearerTokenAuthenticationFilter.doFilterInternal(BearerTokenAuthenticationFilter.java:124) ~[spring-security-oauth2-resource-server-5.
+        ```
+        
+
